@@ -1,26 +1,77 @@
 package learn.hyperskill.tictactoe;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class MainTest {
 
     private static final String NL = System.lineSeparator();
 
-    @Test
-    public void testMain() {
-        PrintStream saved = System.out;
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(buffer));
+    private PrintStream saveOut;
+    private InputStream savedIn;
+    private ByteArrayOutputStream buffer;
 
-        String expected = String.join(NL, "X O X", "O X O", "X X O", "");
+    @Before
+    public void setUp() {
+        saveOut = System.out;
+        savedIn = System.in;
+        buffer = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(buffer));
+    }
+
+    @After
+    public void restore() {
+        System.setOut(saveOut);
+        System.setIn(savedIn);
+    }
+
+    @Test
+    public void testExample1() {
+        setInput("O_OXXO_XX");
+        String expected = String.join(NL, "---------",
+                "| O _ O |",
+                "| X X O |",
+                "| _ X X |",
+                "---------", "");
         Main.main(null);
-        System.setOut(saved);
         assertThat(buffer.toString(), is(expected));
+    }
+
+    @Test
+    public void testExample2() {
+        setInput("OXO__X_OX");
+        String expected = String.join(NL, "---------",
+                "| O X O |",
+                "| _ _ X |",
+                "| _ O X |",
+                "---------", "");
+        Main.main(null);
+        assertThat(buffer.toString(), is(expected));
+    }
+
+    @Test
+    public void testExample3() {
+        setInput("_XO__X___");
+        String expected = String.join(NL, "---------",
+                "| _ X O |",
+                "| _ _ X |",
+                "| _ _ _ |",
+                "---------", "");
+        Main.main(null);
+        assertThat(buffer.toString(), is(expected));
+    }
+
+    private void setInput(String input) {
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
     }
 }

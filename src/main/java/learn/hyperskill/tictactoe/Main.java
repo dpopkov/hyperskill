@@ -1,20 +1,28 @@
 package learn.hyperskill.tictactoe;
 
+import java.util.Scanner;
+
 public class Main {
-    private static final int SIZE = 3;
+    private static final String NL = System.lineSeparator();
+    private static final int WIDTH = 3;
 
     public static void main(String[] args) {
-        final char[] field = {'X', 'O', 'X', 'O', 'X', 'O', 'X', 'X', 'O'};
+        Scanner in = new Scanner(System.in);
+        String input = in.nextLine();
         StringBuilder builder = new StringBuilder();
-        for (int offset = 0; offset < field.length; offset += SIZE) {
-            for (int j = 0; j < SIZE; j++) {
-                if (j > 0) {
-                    builder.append(' ');
-                }
-                builder.append(field[offset + j]);
+        builder.append("---------");
+        builder.append(NL);
+        for (int offset = 0; offset < input.length(); offset += WIDTH) {
+            builder.append("| ");
+            for (int j = 0; j < WIDTH; j++) {
+                builder.append(input.charAt(offset + j));
+                builder.append(' ');
             }
-            builder.append(System.lineSeparator());
+            builder.append("|");
+            builder.append(NL);
         }
+        builder.append("---------");
+        builder.append(NL);
         System.out.print(builder.toString());
     }
 }
