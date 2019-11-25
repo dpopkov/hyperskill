@@ -42,7 +42,9 @@ public class MainTest {
                 "| O _ O |",
                 "| X X O |",
                 "| _ X X |",
-                "---------", "");
+                "---------",
+                "Game not finished",
+                "");
         Main.main(null);
         assertThat(buffer.toString(), is(expected));
     }
@@ -54,7 +56,9 @@ public class MainTest {
                 "| O X O |",
                 "| _ _ X |",
                 "| _ O X |",
-                "---------", "");
+                "---------",
+                "Game not finished",
+                "");
         Main.main(null);
         assertThat(buffer.toString(), is(expected));
     }
@@ -66,7 +70,9 @@ public class MainTest {
                 "| _ X O |",
                 "| _ _ X |",
                 "| _ _ _ |",
-                "---------", "");
+                "---------",
+                "Game not finished",
+                "");
         Main.main(null);
         assertThat(buffer.toString(), is(expected));
     }

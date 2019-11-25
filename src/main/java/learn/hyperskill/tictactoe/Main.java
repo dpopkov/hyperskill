@@ -11,9 +11,11 @@ public class Main {
         String input = in.nextLine();
         char[][] field = parseInput(input);
         System.out.print(buildOutput(field));
+        Analyzer analyzer = new Analyzer('X', 'O');
+        System.out.println(analyzer.findState(field));
     }
 
-    private static char[][] parseInput(String input) {
+    static char[][] parseInput(String input) {
         int size = (int) Math.sqrt(input.length());
         char[][] chars = new char[size][size];
         int row = 0;
