@@ -1,5 +1,8 @@
 package learn.hyperskill.tictactoe;
 
+/**
+ * Analyzer of game field.
+ */
 public class Analyzer {
     static final char NONE = '_';
 
@@ -11,6 +14,11 @@ public class Analyzer {
     private int oCount;
     private int noneCount;
 
+    /**
+     * Constructs analyzer using specified characters
+     * @param x character for X
+     * @param o character for O
+     */
     public Analyzer(char x, char o) {
         this.x = x;
         this.o = o;
@@ -91,6 +99,11 @@ public class Analyzer {
         }
     }
 
+    /**
+     * Finds state of the field.
+     * @param field game field
+     * @return string representation of field state
+     */
     public String findState(char[][] field) {
         char winner = findWinner(field);
         if (xWins && oWins || Math.abs(xCount - oCount) > 1) {

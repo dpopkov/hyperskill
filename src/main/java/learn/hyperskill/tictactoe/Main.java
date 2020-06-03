@@ -33,7 +33,7 @@ public class Main {
 
     private static String buildOutput(char[][] field) {
         StringBuilder builder = new StringBuilder();
-        String horizontal = makeLine(field[0].length * 2 + 3);
+        String horizontal = makeHorizontalLine(field[0].length * 2 + 3);
         builder.append(horizontal);
         builder.append(NL);
         for (char[] row : field) {
@@ -50,7 +50,7 @@ public class Main {
         return builder.toString();
     }
 
-    private static String makeLine(int length) {
+    private static String makeHorizontalLine(int length) {
         char[] chars = new char[length];
         Arrays.fill(chars, '-');
         return new String(chars);

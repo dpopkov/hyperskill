@@ -34,7 +34,7 @@ public class AnalyzerTest {
     }
 
     @Test
-    public void canDetectWhenXWins() {
+    public void canDetectStateXWins() {
         char[][] field = Main.parseInput("XXXOO__O_");
         assertThat(analyzer.findState(field), is("X wins"));
         field = Main.parseInput("XOXOXOXXO");
@@ -42,25 +42,25 @@ public class AnalyzerTest {
     }
 
     @Test
-    public void canDetectWhenOWins() {
+    public void canDetectStateOWins() {
         char[][] field = Main.parseInput("XOOOXOXXO");
         assertThat(analyzer.findState(field), is("O wins"));
     }
 
     @Test
-    public void canDetectDraw() {
+    public void canDetectStateDraw() {
         char[][] field = Main.parseInput("XOXOOXXXO");
         assertThat(analyzer.findState(field), is("Draw"));
     }
 
     @Test
-    public void canDetectNotFinished() {
+    public void canDetectStateNotFinished() {
         char[][] field = Main.parseInput("XO_OOX_X_");
         assertThat(analyzer.findState(field), is("Game not finished"));
     }
 
     @Test
-    public void canDetectImpossible() {
+    public void canDetectStateImpossible() {
         char[][] field = Main.parseInput("XO_XO_XOX");
         assertThat(analyzer.findState(field), is("Impossible"));
         field = Main.parseInput("_O_X__X_X");
