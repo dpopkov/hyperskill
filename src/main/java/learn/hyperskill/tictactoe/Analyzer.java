@@ -4,7 +4,7 @@ package learn.hyperskill.tictactoe;
  * Analyzer of game field.
  */
 public class Analyzer {
-    static final char NONE = '_';
+    static final char NONE = ' ';
 
     private final char x;
     private final char o;

@@ -11,15 +11,39 @@ public class Main {
     private static final Pattern XY_PATTERN = Pattern.compile("(\\d)\\s+(\\d)");
     private static final int SIZE = 3;
 
+    private final Scanner in = new Scanner(System.in);
+    private final char[][] field;
+    private final Analyzer analyzer;
+    private char current;
+
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        System.out.println("Enter cells: ");
-        String input = in.nextLine();
-        char[][] field = parseInput(input);
+        Analyzer analyzer = new Analyzer('X', 'O');
+        Main game = new Main(analyzer);
+        game.run();
+    }
+
+    public Main(Analyzer analyzer) {
+        this.analyzer = analyzer;
+        field = initField();
+        current = 'X';
+    }
+
+    public void run() {
         System.out.print(buildOutput(field));
+        do {
+            move();
+            String state = analyzer.findState(field);
+            if (!"Game not finished".equals(state)) {
+                System.out.println(state);
+                break;
+            }
+        } while (true);
+    }
+
+    private void move() {
+        boolean waitingForInput = true;
         int col;
         int row;
-        boolean waitingForInput = true;
         do {
             int[] coordinates = receiveCoordinates(in);
             col = coordinates[0];
@@ -30,8 +54,9 @@ public class Main {
                 waitingForInput = false;
             }
         } while (waitingForInput);
-        field[row][col] = 'X';
+        field[row][col] = current;
         System.out.print(buildOutput(field));
+        current = current == 'X' ? 'O' : 'X';
     }
 
     private static int[] receiveCoordinates(Scanner in) {
@@ -63,20 +88,10 @@ public class Main {
         return SIZE - y;
     }
 
-    static char[][] parseInput(String input) {
-        int size = (int) Math.sqrt(input.length());
-        char[][] chars = new char[size][size];
-        int row = 0;
-        int col = 0;
-        for (int i = 0; i < input.length(); i++) {
-            char ch = input.charAt(i);
-            ch = ch != '_' ? ch : EMPTY;
-            chars[row][col] = ch;
-            col++;
-            if (col == size) {
-                col = 0;
-                row++;
-            }
+    private static char[][] initField() {
+        char[][] chars = new char[SIZE][SIZE];
+        for (char[] row : chars) {
+            Arrays.fill(row, EMPTY);
         }
         return chars;
     }
