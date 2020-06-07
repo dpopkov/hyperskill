@@ -2,4 +2,4 @@
 
 Projects
 --------
-Tic-Tac-Toe
+[Tic-Tac-Toe](src/main/java/learn/hyperskill/tictactoe)
