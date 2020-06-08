@@ -5,15 +5,18 @@ import java.util.Scanner;
 public class CoffeeMachine {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        System.out.println("Write how many cups of coffee you will need:");
-        int numCups = in.nextInt();
-        Recipe recipe = new Recipe();
-        int water = recipe.water() * numCups;
-        int milk = recipe.milk() * numCups;
-        int beans = recipe.coffeeBeans() * numCups;
-        System.out.printf("For %d cups of coffee you will need:%n", numCups);
-        System.out.printf("%d ml of water%n", water);
-        System.out.printf("%d ml of milk%n", milk);
-        System.out.printf("%d g of coffee beans%n", beans);
+        int water = request(in, "Write how many ml of water the coffee machine has:");
+        int milk = request(in, "Write how many ml of milk the coffee machine has:");
+        int beans = request(in, "Write how many grams of coffee beans the coffee machine has:");
+        int needNumCups = request(in, "Write how many cups of coffee you will need:");
+        Ingredients ingredients = new Ingredients(water, milk, beans);
+        int realNumCups = ingredients.numCupsHasEnoughFor(new Recipe());
+        System.out.println(new MessageProducer().message(needNumCups, realNumCups));
+    }
+
+    private static int request(Scanner in, String prompts) {
+        System.out.println(prompts);
+        System.out.print("> ");
+        return in.nextInt();
     }
 }
