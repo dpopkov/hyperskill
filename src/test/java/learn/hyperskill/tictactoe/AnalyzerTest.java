@@ -37,36 +37,36 @@ public class AnalyzerTest {
     @Test
     public void canDetectStateXWins() {
         char[][] field = parser.parse("XXXOO__O_");
-        assertThat(analyzer.findState(field), is("X wins"));
+        assertThat(analyzer.findState(field), is(State.X_WINS));
         field = parser.parse("XOXOXOXXO");
-        assertThat(analyzer.findState(field), is("X wins"));
+        assertThat(analyzer.findState(field), is(State.X_WINS));
     }
 
     @Test
     public void canDetectStateOWins() {
         char[][] field = parser.parse("XOOOXOXXO");
-        assertThat(analyzer.findState(field), is("O wins"));
+        assertThat(analyzer.findState(field), is(State.O_WINS));
     }
 
     @Test
     public void canDetectStateDraw() {
         char[][] field = parser.parse("XOXOOXXXO");
-        assertThat(analyzer.findState(field), is("Draw"));
+        assertThat(analyzer.findState(field), is(State.DRAW));
     }
 
     @Test
     public void canDetectStateNotFinished() {
         char[][] field = parser.parse("XO_OOX_X_");
-        assertThat(analyzer.findState(field), is("Game not finished"));
+        assertThat(analyzer.findState(field), is(State.NOT_FINISHED));
     }
 
     @Test
     public void canDetectStateImpossible() {
         char[][] field = parser.parse("XO_XO_XOX");
-        assertThat(analyzer.findState(field), is("Impossible"));
+        assertThat(analyzer.findState(field), is(State.IMPOSSIBLE));
         field = parser.parse("_O_X__X_X");
-        assertThat(analyzer.findState(field), is("Impossible"));
+        assertThat(analyzer.findState(field), is(State.IMPOSSIBLE));
         field = parser.parse("_OOOO_X_X");
-        assertThat(analyzer.findState(field), is("Impossible"));
+        assertThat(analyzer.findState(field), is(State.IMPOSSIBLE));
     }
 }

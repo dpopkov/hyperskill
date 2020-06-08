@@ -1,5 +1,7 @@
 package learn.hyperskill.tictactoe;
 
+import java.util.Arrays;
+
 /**
  * Analyzer of game field.
  */
@@ -102,21 +104,21 @@ public class Analyzer {
     /**
      * Finds state of the field.
      * @param field game field
-     * @return string representation of field state
+     * @return state of field
      */
-    public String findState(char[][] field) {
+    public State findState(char[][] field) {
         char winner = findWinner(field);
         if (xWins && oWins || Math.abs(xCount - oCount) > 1) {
-            return "Impossible";
+            return State.IMPOSSIBLE;
         } else if (xWins) {
-            return x + " wins";
+            return State.X_WINS;
         } else if (oWins) {
-            return o + " wins";
+            return State.O_WINS;
         } else if (noneCount > 0) {
-            return "Game not finished";
+            return State.NOT_FINISHED;
         } else if (winner == NONE) {
-            return "Draw";
+            return State.DRAW;
         }
-        throw new IllegalStateException("Could not find correct state of the game");
+        throw new IllegalStateException("Could not find correct state of the field: " + Arrays.deepToString(field));
     }
 }
