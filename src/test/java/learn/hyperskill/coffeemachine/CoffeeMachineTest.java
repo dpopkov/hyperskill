@@ -1,12 +1,15 @@
 package learn.hyperskill.coffeemachine;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Scanner;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class CoffeeMachineTest {
@@ -26,6 +29,41 @@ public class CoffeeMachineTest {
         buffer = new ByteArrayOutputStream();
         System.setOut(new PrintStream(buffer));
     }
+
+    @Test
+    public void whenHasSuppliesThenPrintsCorrectInfo() {
+        Supplies supplies = new Supplies(100, 70, 50, 20);
+        CoffeeMachine coffeeMachine = new CoffeeMachine(null, null, supplies);
+        String expected = String.join(NL, "The coffee machine has:",
+                "100 of water",
+                "70 of milk",
+                "50 of coffee beans",
+                "20 of disposable cups",
+                "550 of money",
+                "");
+        String result = coffeeMachine.info();
+        assertThat(result, is(expected));
+    }
+    // 2) Read action
+
+    // 3) Act
+    @Test
+    public void whenBuyEspressoThenSubtractSuppliesAndMoney() {
+        Supplies supplies = new Supplies(300, 70, 50, 20);
+        CoffeeMachine coffeeMachine = new CoffeeMachine(null, null, supplies);
+        coffeeMachine.buy(new Espresso(), 1);
+        String expected = String.join(NL, "The coffee machine has:",
+                "100 of water",
+                "20 of milk",
+                "35 of coffee beans",
+                "19 of disposable cups",
+                "546 of money",
+                "");
+        String result = coffeeMachine.info();
+        assertThat(result, is(expected));
+    }
+
+    // 4) Print info
 
     @Test
     public void testMainYes() {
