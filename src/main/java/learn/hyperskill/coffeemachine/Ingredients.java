@@ -34,9 +34,9 @@ public class Supplies {
     }
 
     public int numCupsHasEnoughFor(Recipe recipe) {
-        int cupsWater = water / recipe.water();
-        int cupsMilk = milk / recipe.milk();
-        int cupsBeans = beans / recipe.coffeeBeans();
-        return Math.min(cups, Math.min(cupsWater, Math.min(cupsMilk, cupsBeans)));
+        int cupsWater = water / recipe.getWater();
+        int cupsMilk = milk / recipe.getMilk();
+        int cupsBeans = beans / recipe.getCoffeeBeans();
+        return Math.min(cupsWater, Math.min(cupsMilk, cupsBeans));
     }
 }
