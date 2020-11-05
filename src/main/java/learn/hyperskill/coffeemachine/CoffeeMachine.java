@@ -1,7 +1,6 @@
 package learn.hyperskill.coffeemachine;
 
-import java.io.PrintStream;
-import java.util.Scanner;
+import java.util.Map;
 
 public class CoffeeMachine {
     private static final String NL = System.lineSeparator();
