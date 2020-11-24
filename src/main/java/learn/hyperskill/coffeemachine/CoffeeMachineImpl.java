@@ -2,10 +2,9 @@ package learn.hyperskill.coffeemachine;
 
 import java.util.Map;
 
-public class CoffeeMachine {
+public class CoffeeMachineImpl implements ICoffeeMachine {
     private static final String NL = System.lineSeparator();
 
-    private final UI ui;
     private final Map<Integer, Recipe> recipes = Map.of(
             1, new Recipe("espresso", 250, 0, 16, 4),
             2, new Recipe("latte", 350, 75, 20, 7),
@@ -17,8 +16,7 @@ public class CoffeeMachine {
     private int cups;
     private int money;
 
-    public CoffeeMachine(UI ui, int water, int milk, int coffeeBeans, int cups, int money) {
-        this.ui = ui;
+    public CoffeeMachineImpl(int water, int milk, int coffeeBeans, int cups, int money) {
         this.water = water;
         this.milk = milk;
         this.coffeeBeans = coffeeBeans;
@@ -26,6 +24,7 @@ public class CoffeeMachine {
         this.money = money;
     }
 
+    @Override
     public void buy(int recipeId) {
         Recipe recipe = recipes.get(recipeId);
         if (recipe == null) {
@@ -38,13 +37,10 @@ public class CoffeeMachine {
         earnMoney(recipe.getPrice());
     }
 
+    @Override
     public String stateToString() {
-        return "The coffee machine has:" + NL +
-                water + " of water" + NL +
-                milk + " of milk" + NL +
-                coffeeBeans + " of coffee beans" + NL +
-                cups + " of disposable cups" + NL +
-                money + " of money";
+        MachineState state = new MachineState(water, milk, coffeeBeans, cups, money);
+        return state.toString();
     }
 
     private void useWater(int amount) {
@@ -67,49 +63,30 @@ public class CoffeeMachine {
         money += amount;
     }
 
+    @Override
     public void addWater(int amount) {
         water += amount;
     }
 
+    @Override
     public void addMilk(int amount) {
         milk += amount;
     }
 
+    @Override
     public void addBeans(int amount) {
         coffeeBeans += amount;
     }
 
+    @Override
     public void addCups(int amount) {
         cups += amount;
     }
 
-    private int takeMoney() {
+    @Override
+    public int takeMoney() {
         int take = money;
         money = 0;
         return take;
-    }
-
-    public void run() {
-        String action = ui.readString("Write action (buy, fill, take):");
-        if ("buy".equals(action)) {
-            buy(ui.readInt("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:"));
-        } else if ("fill".equals(action)) {
-            addWater(ui.readInt("Write how many ml of water do you want to add:"));
-            addMilk(ui.readInt("Write how many ml of milk do you want to add:"));
-            addBeans(ui.readInt("Write how many grams of coffee beans do you want to add:"));
-            addCups(ui.readInt("Write how many disposable cups of coffee do you want to add:"));
-        } else if ("take".equals(action)) {
-            ui.println("I gave you $" + takeMoney());
-        }
-    }
-
-    public static void main(String[] args) {
-        UI ui = new ConsoleUI();
-        CoffeeMachine machine = new CoffeeMachine(ui,400, 540, 120, 9, 550);
-        System.out.println(machine.stateToString());
-        System.out.println();
-        machine.run();
-        System.out.println();
-        System.out.println(machine.stateToString());
     }
 }
