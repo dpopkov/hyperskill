@@ -9,7 +9,7 @@ import java.io.PrintStream;
 
 import static org.junit.Assert.*;
 
-public class MainTest {
+public class MainIntegrationTest {
 
     private static final String NL = System.lineSeparator();
     private static final String PROMPT_PREFIX = String.join(NL,

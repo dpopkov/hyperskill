@@ -1,10 +1,10 @@
 package learn.hyperskill.coffeemachine;
 
 public class CoffeeMachineRunner {
-    private final ICoffeeMachine machine;
+    private final CoffeeMachine machine;
     private final UI ui;
 
-    public CoffeeMachineRunner(ICoffeeMachine machine, UI ui) {
+    public CoffeeMachineRunner(CoffeeMachine machine, UI ui) {
         this.machine = machine;
         this.ui = ui;
     }
@@ -14,7 +14,8 @@ public class CoffeeMachineRunner {
         ui.println("");
         String action = ui.readString("Write action (buy, fill, take):");
         if ("buy".equals(action)) {
-            machine.buy(ui.readInt("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:"));
+            int id = ui.readInt("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
+            machine.buy(Recipes.byId(id));
         } else if ("fill".equals(action)) {
             machine.addWater(ui.readInt("Write how many ml of water do you want to add:"));
             machine.addMilk(ui.readInt("Write how many ml of milk do you want to add:"));

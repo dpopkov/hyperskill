@@ -1,15 +1,6 @@
 package learn.hyperskill.coffeemachine;
 
-import java.util.Map;
-
-public class CoffeeMachineImpl implements ICoffeeMachine {
-    private static final String NL = System.lineSeparator();
-
-    private final Map<Integer, Recipe> recipes = Map.of(
-            1, new Recipe("espresso", 250, 0, 16, 4),
-            2, new Recipe("latte", 350, 75, 20, 7),
-            3, new Recipe("cappuccino", 200, 100, 12, 6)
-    );
+public class CoffeeMachineImpl implements CoffeeMachine {
     private int water;
     private int milk;
     private int coffeeBeans;
@@ -25,11 +16,7 @@ public class CoffeeMachineImpl implements ICoffeeMachine {
     }
 
     @Override
-    public void buy(int recipeId) {
-        Recipe recipe = recipes.get(recipeId);
-        if (recipe == null) {
-            throw new IllegalArgumentException("Can not find a recipe with id " + recipeId);
-        }
+    public void buy(Recipe recipe) {
         useWater(recipe.getWater());
         useMilk(recipe.getMilk());
         useCoffeeBeans(recipe.getCoffeeBeans());
@@ -88,5 +75,10 @@ public class CoffeeMachineImpl implements ICoffeeMachine {
         int take = money;
         money = 0;
         return take;
+    }
+
+    @Override
+    public MachineState getState() {
+        return new MachineState(water, milk, coffeeBeans, cups, money);
     }
 }

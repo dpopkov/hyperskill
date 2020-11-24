@@ -1,8 +1,8 @@
 package learn.hyperskill.coffeemachine;
 
-public interface ICoffeeMachine {
+public interface CoffeeMachine {
 
-    void buy(int recipeId);
+    void buy(Recipe recipe);
 
     String stateToString();
 
@@ -15,4 +15,6 @@ public interface ICoffeeMachine {
     void addCups(int amount);
 
     int takeMoney();
+
+    MachineState getState();
 }

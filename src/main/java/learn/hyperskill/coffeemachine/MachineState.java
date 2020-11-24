@@ -1,5 +1,7 @@
 package learn.hyperskill.coffeemachine;
 
+import java.util.Objects;
+
 public class MachineState {
     private static final String NL = System.lineSeparator();
 
@@ -24,5 +26,22 @@ public class MachineState {
                 coffeeBeans + " of coffee beans" + NL +
                 cups + " of disposable cups" + NL +
                 money + " of money";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MachineState that = (MachineState) o;
+        return water == that.water &&
+                milk == that.milk &&
+                coffeeBeans == that.coffeeBeans &&
+                cups == that.cups &&
+                money == that.money;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(water, milk, coffeeBeans, cups, money);
     }
 }
