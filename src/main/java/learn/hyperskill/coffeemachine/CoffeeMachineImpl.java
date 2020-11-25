@@ -17,24 +17,24 @@ public class CoffeeMachineImpl implements CoffeeMachine {
 
     @Override
     public void buy(Recipe recipe) {
-        useWater(recipe.getWater());
-        useMilk(recipe.getMilk());
-        useCoffeeBeans(recipe.getCoffeeBeans());
-        useCup();
+        consumeWater(recipe.getWater());
+        consumeMilk(recipe.getMilk());
+        consumeCoffeeBeans(recipe.getCoffeeBeans());
+        consumeCup();
         earnMoney(recipe.getPrice());
     }
 
     @Override
     public CheckResult checkResourcesFor(Recipe recipe) {
-        String messagePrefix = "Sorry, not enough ";
+        String messageFormat = "Sorry, not enough %s!";
         if (recipe.getWater() > water) {
-            return CheckResult.negative(messagePrefix + "water!");
+            return CheckResult.negative(messageFormat, "water");
         } else if (recipe.getMilk() > milk) {
-            return CheckResult.negative(messagePrefix + "milk!");
+            return CheckResult.negative(messageFormat, "milk");
         } else if (recipe.getCoffeeBeans() > coffeeBeans) {
-            return CheckResult.negative(messagePrefix + "coffee beans!");
+            return CheckResult.negative(messageFormat, "coffee beans");
         } else if (1 > cups) {
-            return CheckResult.negative(messagePrefix + "cups!");
+            return CheckResult.negative(messageFormat, "cups");
         }
         return CheckResult.positive();
     }
@@ -45,19 +45,19 @@ public class CoffeeMachineImpl implements CoffeeMachine {
         return state.toString();
     }
 
-    private void useWater(int amount) {
+    private void consumeWater(int amount) {
         water -= amount;
     }
 
-    private void useMilk(int amount) {
+    private void consumeMilk(int amount) {
         milk -= amount;
     }
 
-    private void useCoffeeBeans(int amount) {
+    private void consumeCoffeeBeans(int amount) {
         coffeeBeans -= amount;
     }
 
-    private void useCup() {
+    private void consumeCup() {
         cups--;
     }
 

@@ -22,8 +22,8 @@ public class CheckResult {
         return positiveResult;
     }
 
-    public static CheckResult negative(String message) {
-        return new CheckResult(message);
+    public static CheckResult negative(String formatMessage, String resourceName) {
+        return new CheckResult(String.format(formatMessage, resourceName));
     }
 
     public boolean hasEnoughResources() {
