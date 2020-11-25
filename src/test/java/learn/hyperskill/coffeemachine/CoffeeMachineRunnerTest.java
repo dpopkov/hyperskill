@@ -1,17 +1,27 @@
 package learn.hyperskill.coffeemachine;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static learn.hyperskill.coffeemachine.CoffeeMachineRunner.ACTION_PROMPT;
-import static learn.hyperskill.coffeemachine.CoffeeMachineRunner.BUY_PROMPT;
 import static org.mockito.BDDMockito.*;
 
 @DisplayName("CoffeeMachineRunner должен")
 class CoffeeMachineRunnerTest {
-    private final UI ui = mock(UI.class);
-    private final CoffeeMachine machine = mock(CoffeeMachine.class);
+    public static final String BUY_PROMPT =
+            "What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:";
+
+    private UI ui;
+    private CoffeeMachine machine;
     private CoffeeMachineRunner machineRunner;
+
+    @BeforeEach
+    public void setUp() {
+        ui = mock(UI.class);
+        machine = mock(CoffeeMachine.class);
+        machineRunner = new CoffeeMachineRunner(machine, ui);
+    }
 
     @Test
     @DisplayName("вызывать у машины метод покупки")
@@ -23,7 +33,7 @@ class CoffeeMachineRunnerTest {
         CheckResult check = mock(CheckResult.class);
         given(check.hasEnoughResources()).willReturn(true);
         given(machine.checkResourcesFor(any())).willReturn(check);
-        machineRunner = new CoffeeMachineRunner(machine, ui);
+        machineRunner.addActions(Action.BUY);
         machineRunner.run();
         verify(machine, atLeastOnce()).buy(any());
     }
@@ -41,7 +51,7 @@ class CoffeeMachineRunnerTest {
                 .willReturn(10);
         given(ui.readInt("Write how many disposable cups of coffee do you want to add:"))
                 .willReturn(3);
-        machineRunner = new CoffeeMachineRunner(machine, ui);
+        machineRunner.addActions(Action.FILL);
         machineRunner.run();
         verify(machine, atLeastOnce()).addWater(100);
         verify(machine, atLeastOnce()).addMilk(50);
@@ -54,7 +64,7 @@ class CoffeeMachineRunnerTest {
     public void shouldAllowToTakeMoney() {
         given(ui.readString(ACTION_PROMPT))
                 .willReturn("take").willReturn("exit");
-        machineRunner = new CoffeeMachineRunner(machine, ui);
+        machineRunner.addActions(Action.TAKE);
         machineRunner.run();
         verify(machine, atLeastOnce()).takeMoney();
     }
@@ -63,7 +73,7 @@ class CoffeeMachineRunnerTest {
     @DisplayName("выводить состояние машины")
     public void shouldPrintRemaining() {
         given(ui.readString(ACTION_PROMPT)).willReturn("remaining").willReturn("exit");
-        machineRunner = new CoffeeMachineRunner(machine, ui);
+        machineRunner.addActions(Action.REMAINING);
         machineRunner.run();
         verify(machine, atLeastOnce()).stateToString();
     }
