@@ -1,92 +1,75 @@
 package learn.hyperskill.coffeemachine;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class MainIntegrationTest {
-
     private static final String NL = System.lineSeparator();
-    private static final String PROMPT_PREFIX = String.join(NL,
-            "The coffee machine has:",
-            "400 of water",
-            "540 of milk",
-            "120 of coffee beans",
-            "9 of disposable cups",
-            "550 of money",
-            "",
-            "Write action (buy, fill, take):"
-    );
+    private static final String INPUT_PROMPT = "> ";
+    private static final List<String> commands = new ArrayList<>();
+    private static String expectedOutput;
 
     private ByteArrayOutputStream buffer;
+    private PrintStream savedOut;
+    private InputStream savedIn;
 
-    @Before
+    @BeforeAll
+    static void setupInputOutput() throws Exception {
+        try (InputStream in = MainIntegrationTest.class.getResourceAsStream("main-input-output.txt");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+            assertNotNull(in);
+            StringBuilder builder = new StringBuilder();
+            final int inputPromptLength = INPUT_PROMPT.length();
+            reader.lines()
+                    .map(s -> {
+                        if (s.startsWith("> ")) {
+                            commands.add(s.substring(inputPromptLength));
+                            return s.substring(0, inputPromptLength);
+                        } else {
+                            return s;
+                        }
+                    })
+                    .forEach((s) -> {
+                        builder.append(s);
+                        if (s.length() > inputPromptLength || s.isEmpty()) {
+                            builder.append(NL);
+                        }
+                    });
+            expectedOutput = builder.toString();
+        }
+    }
+
+    @BeforeEach
     public void setup() {
         buffer = new ByteArrayOutputStream();
+        savedOut = System.out;
         System.setOut(new PrintStream(buffer));
-    }
-
-    @Test
-    public void testBuyCappuccino() {
-        MachineState expectedState = new MachineState(200, 440, 108, 8, 556);
-        String expected = buildExpected(expectedState, true,
-                "What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
-        prepareInput(String.join(NL, "buy", "3", ""));
-        Main.main(null);
-        assertEquals(expected, buffer.toString());
-    }
-
-    @Test
-    public void testBuyEspresso() {
-        MachineState expectedState = new MachineState(150, 540, 104, 8, 554);
-        String expected = buildExpected(expectedState, true,
-                "What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
-        prepareInput(String.join(NL, "buy", "1", ""));
-        Main.main(null);
-        assertEquals(expected, buffer.toString());
-    }
-
-    @Test
-    public void testFillingTheMachine() {
-        MachineState expectedState = new MachineState(2400, 1040, 220, 19, 550);
-        String expected = buildExpected(expectedState,
-                true, "Write how many ml of water do you want to add:",
-                "Write how many ml of milk do you want to add:",
-                "Write how many grams of coffee beans do you want to add:",
-                "Write how many disposable cups of coffee do you want to add:");
-        prepareInput(String.join(NL, "fill", "2000", "500", "100", "10", ""));
-        Main.main(null);
-        assertEquals(expected, buffer.toString());
-    }
-
-    @Test
-    public void testTakingMoney() {
-        MachineState expectedState = new MachineState(400, 540, 120, 9, 0);
-        String expected = buildExpected(expectedState, false, "I gave you $550");
-        prepareInput(String.join(NL, "take", ""));
-        Main.main(null);
-        assertEquals(expected, buffer.toString());
-    }
-
-    private static String buildExpected(MachineState expectedState, boolean needsInput, String... machinePrompts) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(PROMPT_PREFIX).append(NL).append("> ");
-        for (String promptItem : machinePrompts) {
-            sb.append(promptItem).append(NL);
-            if (needsInput) {
-                sb.append("> ");
-            }
+        StringBuilder inputBuffer = new StringBuilder();
+        for (String cmd : commands) {
+            inputBuffer.append(cmd);
+            inputBuffer.append(NL);
         }
-        sb.append(NL).append(expectedState.toString()).append(NL);
-        return sb.toString();
+        savedIn = System.in;
+        System.setIn(new ByteArrayInputStream(inputBuffer.toString().getBytes()));
     }
 
-    private void prepareInput(String s) {
-        System.setIn(new ByteArrayInputStream(s.getBytes()));
+    @AfterEach
+    public void tearDown() {
+        System.setOut(savedOut);
+        System.setIn(savedIn);
+    }
+
+    @Test
+    void shouldGiveCorrectOutput() {
+        Main.main(null);
+        assertEquals(expectedOutput, buffer.toString());
     }
 }

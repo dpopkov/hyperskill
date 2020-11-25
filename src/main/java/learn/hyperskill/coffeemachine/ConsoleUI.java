@@ -16,7 +16,9 @@ public class ConsoleUI implements UI {
     public int readInt(String prompt) {
         println(prompt);
         out.print("> ");
-        return in.nextInt();
+        int n = in.nextInt();
+        in.nextLine();
+        return n;
     }
 
     @Override

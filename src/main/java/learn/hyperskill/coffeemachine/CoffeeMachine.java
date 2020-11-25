@@ -4,6 +4,8 @@ public interface CoffeeMachine {
 
     void buy(Recipe recipe);
 
+    CheckResult checkResourcesFor(Recipe recipe);
+
     String stateToString();
 
     void addWater(int amount);

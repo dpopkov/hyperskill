@@ -25,6 +25,21 @@ public class CoffeeMachineImpl implements CoffeeMachine {
     }
 
     @Override
+    public CheckResult checkResourcesFor(Recipe recipe) {
+        String messagePrefix = "Sorry, not enough ";
+        if (recipe.getWater() > water) {
+            return CheckResult.negative(messagePrefix + "water!");
+        } else if (recipe.getMilk() > milk) {
+            return CheckResult.negative(messagePrefix + "milk!");
+        } else if (recipe.getCoffeeBeans() > coffeeBeans) {
+            return CheckResult.negative(messagePrefix + "coffee beans!");
+        } else if (1 > cups) {
+            return CheckResult.negative(messagePrefix + "cups!");
+        }
+        return CheckResult.positive();
+    }
+
+    @Override
     public String stateToString() {
         MachineState state = new MachineState(water, milk, coffeeBeans, cups, money);
         return state.toString();

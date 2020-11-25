@@ -25,7 +25,7 @@ public class MachineState {
                 milk + " of milk" + NL +
                 coffeeBeans + " of coffee beans" + NL +
                 cups + " of disposable cups" + NL +
-                money + " of money";
+                (money > 0 ? "$" : "") + money + " of money";
     }
 
     @Override
