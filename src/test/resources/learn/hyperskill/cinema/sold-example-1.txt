@@ -1,0 +1,6 @@
+Enter the number of rows:
+> 4
+Enter the number of seats in each row:
+> 5
+Total income:
+$200

@@ -1,5 +1,6 @@
 package learn.hyperskill.coffeemachine;
 
+import learn.hyperskill.util.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,28 +24,8 @@ public class MainIntegrationTest {
 
     @BeforeAll
     static void setupInputOutput() throws Exception {
-        try (InputStream in = MainIntegrationTest.class.getResourceAsStream("main-input-output.txt");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-            assertNotNull(in);
-            StringBuilder builder = new StringBuilder();
-            final int inputPromptLength = INPUT_PROMPT.length();
-            reader.lines()
-                    .map(s -> {
-                        if (s.startsWith("> ")) {
-                            commands.add(s.substring(inputPromptLength));
-                            return s.substring(0, inputPromptLength);
-                        } else {
-                            return s;
-                        }
-                    })
-                    .forEach((s) -> {
-                        builder.append(s);
-                        if (s.length() > inputPromptLength || s.isEmpty()) {
-                            builder.append(NL);
-                        }
-                    });
-            expectedOutput = builder.toString();
-        }
+        expectedOutput = TestUtils.readInputOutput(MainIntegrationTest.class,
+                "main-input-output.txt", INPUT_PROMPT, commands);
     }
 
     @BeforeEach
